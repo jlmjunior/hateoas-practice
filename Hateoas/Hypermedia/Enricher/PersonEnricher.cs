@@ -15,7 +15,7 @@ namespace Hateoas.Hypermedia.Enricher
 
         protected override Task EnrichModel(PersonModel content, IUrlHelper urlHelper)
         {
-            var path = "api/person/v1";
+            var path = "api/person";
             string link = GetLink(content.Id, urlHelper, path);
 
             content.Links.Add(new HyperMediaLink()

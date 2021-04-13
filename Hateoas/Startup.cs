@@ -1,4 +1,6 @@
 using Hateoas.Business;
+using Hateoas.Hypermedia.Enricher;
+using Hateoas.Hypermedia.Filters;
 using Hateoas.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +37,11 @@ namespace Hateoas
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hateoas", Version = "v1" });
             });
 
+            var filterOptions = new HyperMediaFilterOptions();
+            filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+
+            services.AddSingleton(filterOptions);
+
             services.AddScoped<IPersonBusiness, PersonBusiness>();
             services.AddScoped<IPersonRepository, PersonRepository>();
         }
@@ -58,6 +65,7 @@ namespace Hateoas
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
             });
         }
     }

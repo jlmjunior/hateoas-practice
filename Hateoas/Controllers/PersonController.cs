@@ -1,4 +1,5 @@
 ﻿using Hateoas.Business;
+using Hateoas.Hypermedia.Filters;
 using Hateoas.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,19 +11,20 @@ using System.Threading.Tasks;
 namespace Hateoas.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class DefaultController : ControllerBase
+    [Route("api/[controller]")]
+    public class PersonController : ControllerBase
     {
-        private readonly ILogger<DefaultController> _logger;
+        private readonly ILogger<PersonController> _logger;
         private readonly IPersonBusiness _personBusiness;
 
-        public DefaultController(ILogger<DefaultController> logger, IPersonBusiness personBusiness)
+        public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
         {
             _logger = logger;
             _personBusiness = personBusiness;
         }
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult GetAll()
         {
             return Ok(_personBusiness.FindAll());
